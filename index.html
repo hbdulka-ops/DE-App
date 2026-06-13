@@ -1,262 +1,191 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deutsches Briefformat</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 11pt;
-      color: #111;
-      background: #d0d0d0;
-      line-height: 1.5;
-    }
-
-    /* ── Toolbar ── */
-    .toolbar {
-      background: #2c3e50;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 6px rgba(0,0,0,.3);
-    }
-    .toolbar span { color: #ecf0f1; font-size: 11pt; font-weight: 600; }
-    .btn {
-      padding: 7px 18px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 10pt;
-      font-weight: 600;
-      background: #27ae60;
-      color: #fff;
-      transition: background .2s;
-    }
-    .btn:hover { background: #1e8449; }
-
-    /* ── Edit hint ── */
-    .hint {
-      text-align: center;
-      padding: 8px;
-      background: #fffbea;
-      font-size: 9pt;
-      color: #7a6000;
-      border-bottom: 1px solid #f0d060;
-    }
-
-    /* ── A4 Page ── */
-    .page-wrap {
-      display: flex;
-      justify-content: center;
-      padding: 30px 0 60px;
-    }
-
-    .brief {
-      width: 210mm;
-      min-height: 297mm;
-      background: #fff;
-      box-shadow: 0 3px 20px rgba(0,0,0,.2);
-      /* margins matching the sample letter */
-      padding: 22mm 25mm 20mm 22mm;
-      position: relative;
-    }
-
-    /* ── Editable ── */
-    [contenteditable="true"] {
-      outline: none;
-      border-bottom: 1.5px dashed #3498db;
-      cursor: text;
-      display: inline;
-      padding: 0 1px;
-      border-radius: 2px;
-      transition: background .15s;
-    }
-    [contenteditable="true"]:focus { background: #eaf4ff; }
-    [contenteditable="true"]:empty::before {
-      content: attr(data-ph);
-      color: #bbb;
-      font-style: italic;
-    }
-
-    /* block-level editable */
-    .block-edit {
-      display: block;
-      width: 100%;
-      border-bottom: none;
-      border-left: 2px dashed transparent;
-      padding-left: 3px;
-      min-height: 1.4em;
-    }
-    .block-edit:focus {
-      background: #eaf4ff;
-      border-left-color: #3498db;
-    }
-
-    /* ── Absender (sender small line top) ── */
-    .absender-zeile {
-      font-size: 8pt;
-      color: #444;
-      margin-bottom: 14mm;
-    }
-
-    /* ── Empfänger ── */
-    .empfaenger {
-      font-size: 11pt;
-      font-weight: 700;
-      line-height: 1.7;
-      margin-bottom: 0;
-    }
-    .empfaenger div { font-weight: 700; }
-
-    /* ── Datum ── */
-    .datum-zeile {
-      text-align: right;
-      font-size: 11pt;
-      margin-top: 6mm;
-      margin-bottom: 14mm;
-    }
-
-    /* ── Betreff ── */
-    .betreff {
-      font-size: 11pt;
-      font-weight: 700;
-      line-height: 1.6;
-      margin-bottom: 6mm;
-    }
-
-    /* ── Anrede ── */
-    .anrede {
-      font-size: 11pt;
-      margin-bottom: 5mm;
-    }
-
-    /* ── Body paragraphs ── */
-    .brieftext {
-      font-size: 11pt;
-      line-height: 1.6;
-      text-align: justify;
-    }
-    .brieftext p {
-      margin-bottom: 3mm;
-      min-height: 1.5em;
-    }
-
-    /* ── Grußformel ── */
-    .gruss {
-      margin-top: 6mm;
-      margin-bottom: 14mm;
-      font-size: 11pt;
-    }
-
-    /* ── Name ── */
-    .name-zeile {
-      font-size: 11pt;
-    }
-
-    /* ── PRINT ── */
-    @media print {
-      body, .page-wrap { background: #fff; }
-      .toolbar, .hint { display: none !important; }
-      .brief { box-shadow: none; margin: 0; }
-      [contenteditable] { border: none !important; background: transparent !important; }
-      @page { size: A4; margin: 0; }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Deutsches Briefformat</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:Arial,sans-serif;
+  font-size:12pt;
+  color:#111;
+  background:#c8c8c8;
+  line-height:1.45;
+}
+.toolbar{
+  background:#2c3e50;
+  padding:9px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+.toolbar span{color:#ecf0f1;font-size:11pt;font-weight:600;}
+.btn{
+  padding:7px 18px;border:none;border-radius:4px;
+  cursor:pointer;font-size:10pt;font-weight:600;
+  background:#27ae60;color:#fff;
+}
+.btn:hover{background:#1e8449;}
+.hint{
+  text-align:center;padding:7px;
+  background:#fffbea;font-size:9pt;color:#7a6000;
+  border-bottom:1px solid #f0d060;
+}
+.page-wrap{
+  display:flex;justify-content:center;
+  padding:28px 0 60px;
+}
+.brief{
+  width:210mm;
+  min-height:297mm;
+  background:#fff;
+  box-shadow:0 3px 22px rgba(0,0,0,.22);
+  position:relative;
+  padding-top:45mm;
+  padding-left:25mm;
+  padding-right:20mm;
+  padding-bottom:20mm;
+}
+[contenteditable]{
+  outline:none;
+  border-bottom:1.5px dashed #3498db;
+  cursor:text;
+  display:inline;
+  padding:0 1px;
+  transition:background .15s;
+  min-width:10px;
+}
+[contenteditable]:focus{background:#eaf4ff;}
+[contenteditable]:empty::before{
+  content:attr(data-ph);
+  color:#ccc;
+}
+.absender-zeile{
+  font-size:8pt;
+  color:#333;
+  margin-bottom:3mm;
+}
+.empfaenger{
+  font-size:12pt;
+  font-weight:700;
+  line-height:1.65;
+}
+.empfaenger div{display:block;}
+.datum{
+  position:absolute;
+  top:calc(45mm + 4mm + 28mm);
+  right:20mm;
+  font-size:12pt;
+  text-align:right;
+}
+.gap-after-address{margin-top:26mm;}
+.betreff{
+  font-size:12pt;
+  font-weight:700;
+  line-height:1.6;
+  white-space:pre-wrap;
+  margin-bottom:6mm;
+  display:block;
+  width:100%;
+  border-bottom:none !important;
+  border-left:2px dashed transparent;
+  padding-left:3px;
+  min-height:1.5em;
+}
+.betreff:focus{background:#eaf4ff;border-left-color:#3498db !important;}
+.betreff:empty::before{content:attr(data-ph);color:#ccc;font-weight:400;}
+.anrede{font-size:12pt;margin-bottom:5mm;}
+.brieftext{
+  font-size:12pt;
+  line-height:1.55;
+  text-align:justify;
+}
+.brieftext p{
+  display:block;
+  width:100%;
+  min-height:1.5em;
+  margin-bottom:0;
+  border-bottom:none !important;
+  border-left:2px dashed transparent;
+  padding-left:3px;
+}
+.brieftext p:focus{background:#eaf4ff;border-left-color:#3498db !important;}
+.brieftext p:empty::before{content:attr(data-ph);color:#ccc;}
+.gruss{font-size:12pt;margin-top:5mm;margin-bottom:14mm;}
+.name-zeile{font-size:12pt;}
+@media print{
+  body,.page-wrap{background:#fff;}
+  .toolbar,.hint{display:none!important;}
+  .brief{box-shadow:none;}
+  [contenteditable]{border:none!important;background:transparent!important;}
+  @page{size:A4;margin:0;}
+}
+</style>
 </head>
 <body>
 
 <div class="toolbar">
-  <span>📄 Deutsches Briefformat</span>
+  <span>📄 Deutsches Briefformat – DIN 5008</span>
   <button class="btn" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
 </div>
-
-<div class="hint">✏️ Klicken Sie auf einen beliebigen Text, um ihn zu bearbeiten &nbsp;|&nbsp; Zum Speichern als PDF: <strong>Drucken → Als PDF speichern</strong></div>
+<div class="hint">✏️ Text anklicken zum Bearbeiten &nbsp;|&nbsp; PDF: <strong>Drucken → Als PDF speichern</strong></div>
 
 <div class="page-wrap">
-  <div class="brief">
+ <div class="brief">
 
-    <!-- Absender kleine Zeile oben -->
-    <div class="absender-zeile">
-      <span contenteditable="true" data-ph="Vor- und Nachname, Straße, PLZ Ort">Gatada Alnour, Ringstr. 29, 21339 Lüneburg</span>
-    </div>
+  <div class="absender-zeile">
+    <span contenteditable="true" data-ph="Name, Straße, PLZ Ort"></span>
+  </div>
 
-    <!-- Empfänger -->
-    <div class="empfaenger">
-      <div contenteditable="true" data-ph="Empfänger / Firma">Telekom Deutschland GmbH</div>
-      <div contenteditable="true" data-ph="Abteilung (optional)">Kundenservice</div>
-      <div contenteditable="true" data-ph="Straße Hausnummer">Landgrabenweg 151</div>
-      <div contenteditable="true" data-ph="PLZ Ort">53227 Bonn</div>
-    </div>
+  <div class="empfaenger">
+    <div contenteditable="true" data-ph="Firma / Name"></div>
+    <div contenteditable="true" data-ph="Abteilung"></div>
+    <div contenteditable="true" data-ph="Straße Hausnummer"></div>
+    <div contenteditable="true" data-ph="PLZ Ort"></div>
+  </div>
 
-    <!-- Datum -->
-    <div class="datum-zeile">
-      <span contenteditable="true" data-ph="TT.MM.JJJJ">09.06.2026</span>
-    </div>
+  <div class="datum">
+    <span contenteditable="true" data-ph="TT.MM.JJJJ"></span>
+  </div>
 
-    <!-- Betreff -->
-    <div class="betreff" contenteditable="true" data-ph="Betreff des Schreibens&#10;(Zeilenumbruch mit Enter möglich)">Rücktritt vom neuen Glasfaser-Vertrag aufgrund von Nichterfüllung / Unberührtheit des DSL-Altvertrages
-Bestellnummer: 260123-PSM-43L9LC
-Gebäude: Ringstr. 29, 21339 Lüneburg</div>
+  <div class="gap-after-address">
 
-    <!-- Anrede -->
+    <div class="betreff" contenteditable="true" data-ph="Betreff"></div>
+
     <div class="anrede">
-      <span contenteditable="true" data-ph="Sehr geehrte Damen und Herren,">Sehr geehrte Damen und Herren,</span>
+      <span contenteditable="true" data-ph="Sehr geehrte Damen und Herren,"></span>
     </div>
 
-    <!-- Brieftext -->
     <div class="brieftext">
-
-      <p contenteditable="true" class="block-edit" data-ph="Erster Absatz...">am 23.01.2026 habe ich den Vertrag für einen Glasfaser-Anschluss mit der Auftragsnummer 260123-PSM-43L9LC abgeschlossen.</p>
-
-      <p contenteditable="true" class="block-edit" data-ph="Zweiter Absatz...">Obwohl der Hausanschluss bereits vorhanden ist und alle Vorbereitungen meinerseits am 24.01.2026 getroffen wurden, ist der Anschluss bis heute – nach mehr als vier Monaten und mehreren verschobenen bzw. abgesagten Terminen Ihrerseits – immer noch nicht freigeschaltet. Mit Ihrer jüngsten E-Mail haben Sie nun auch noch den geplanten Termin am 19.06.2026 storniert.</p>
-
-      <p contenteditable="true" class="block-edit" data-ph="Dritter Absatz...">Da Sie Ihrer Leistungspflicht innerhalb einer angemessenen Zeit nicht nachgekommen sind und verbindliche Termine wiederholt nicht eingehalten haben, trete ich hiermit mit sofortiger Wirkung von diesem neuen Glasfaser-Vertrag zurück. Ein neuer Terminvorschlag Ihrerseits ist nicht mehr notwendig und wird nicht akzeptiert.</p>
-
-      <p contenteditable="true" class="block-edit" data-ph="Vierter Absatz...">Mein bestehender DSL-Altvertrag, für den ich weiterhin ordnungsgemäß die monatlichen Gebühren bezahle, bleibt von diesem Rücktritt ausdrücklich unberührt und läuft unverändert weiter.</p>
-
-      <p contenteditable="true" class="block-edit" data-ph="Abschlusssatz...">Bitte bestätigen Sie mir den Rücktritt von dem oben genannten Glasfaser-Auftrag sowie das unveränderte Weiterbestehen des DSL-Altvertrages schriftlich innerhalb von 14 Tagen.</p>
-
+      <p contenteditable="true" data-ph="Text …"></p>
     </div>
 
-    <!-- Grußformel -->
     <div class="gruss">
-      <span contenteditable="true" data-ph="Mit freundlichen Grüßen">Mit freundlichen Grüßen</span>
+      <span contenteditable="true" data-ph="Mit freundlichen Grüßen"></span>
     </div>
 
-    <!-- Name -->
     <div class="name-zeile">
-      <span contenteditable="true" data-ph="Vor- und Nachname">Gatada Alnour</span>
+      <span contenteditable="true" data-ph="Vor- und Nachname"></span>
     </div>
 
   </div>
+ </div>
 </div>
 
 <script>
-  // Tab-Navigation zwischen Feldern
-  const fields = [...document.querySelectorAll('[contenteditable="true"]')];
-  fields.forEach((el, i) => {
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        const next = fields[i + (e.shiftKey ? -1 : 1)];
-        if (next) { next.focus(); selectAll(next); }
-      }
-    });
+const fields=[...document.querySelectorAll('[contenteditable]')];
+fields.forEach((el,i)=>{
+  el.addEventListener('keydown',e=>{
+    if(e.key==='Tab'){
+      e.preventDefault();
+      const n=fields[i+(e.shiftKey?-1:1)];
+      if(n){n.focus();const r=document.createRange();r.selectNodeContents(n);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+    }
   });
-  function selectAll(el) {
-    const r = document.createRange();
-    r.selectNodeContents(el);
-    const s = window.getSelection();
-    s.removeAllRanges();
-    s.addRange(r);
-  }
+});
 </script>
 </body>
 </html>
