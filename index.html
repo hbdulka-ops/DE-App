@@ -1,64 +1,58 @@
 <!DOCTYPE html>
-<html lang="de" dir="ltr">
+<html lang="de">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deutsches Briefformat – DIN 5008</title>
+  <title>Deutsches Briefformat</title>
   <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       font-size: 11pt;
-      color: #1a1a1a;
-      background: #e8e8e8;
-      line-height: 1.4;
+      color: #111;
+      background: #d0d0d0;
+      line-height: 1.5;
     }
 
-    /* ── Screen: toolbar ── */
+    /* ── Toolbar ── */
     .toolbar {
       background: #2c3e50;
-      padding: 12px 24px;
+      padding: 10px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 6px rgba(0,0,0,.3);
     }
-    .toolbar h1 {
-      color: #ecf0f1;
-      font-size: 14pt;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .toolbar-btns { display: flex; gap: 10px; }
+    .toolbar span { color: #ecf0f1; font-size: 11pt; font-weight: 600; }
     .btn {
-      padding: 8px 20px;
+      padding: 7px 18px;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       cursor: pointer;
       font-size: 10pt;
       font-weight: 600;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-print {
       background: #27ae60;
       color: #fff;
+      transition: background .2s;
     }
-    .btn-print:hover { background: #219a52; }
-    .btn-reset {
-      background: #e74c3c;
-      color: #fff;
-    }
-    .btn-reset:hover { background: #c0392b; }
+    .btn:hover { background: #1e8449; }
 
-    /* ── DIN 5008 Page (A4) ── */
-    .page-wrapper {
+    /* ── Edit hint ── */
+    .hint {
+      text-align: center;
+      padding: 8px;
+      background: #fffbea;
+      font-size: 9pt;
+      color: #7a6000;
+      border-bottom: 1px solid #f0d060;
+    }
+
+    /* ── A4 Page ── */
+    .page-wrap {
       display: flex;
       justify-content: center;
       padding: 30px 0 60px;
@@ -68,402 +62,201 @@
       width: 210mm;
       min-height: 297mm;
       background: #fff;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      box-shadow: 0 3px 20px rgba(0,0,0,.2);
+      /* margins matching the sample letter */
+      padding: 22mm 25mm 20mm 22mm;
       position: relative;
-      /* DIN 5008 margins: left 25mm, right 20mm, top 27mm, bottom 20mm */
-      padding: 27mm 20mm 20mm 25mm;
     }
 
-    /* editable fields */
+    /* ── Editable ── */
     [contenteditable="true"] {
       outline: none;
       border-bottom: 1.5px dashed #3498db;
-      min-width: 30px;
-      display: inline-block;
       cursor: text;
-      transition: background 0.15s;
+      display: inline;
+      padding: 0 1px;
       border-radius: 2px;
-      padding: 0 2px;
+      transition: background .15s;
     }
-    [contenteditable="true"]:focus {
-      background: #eaf4ff;
-      border-bottom-color: #2980b9;
-    }
+    [contenteditable="true"]:focus { background: #eaf4ff; }
     [contenteditable="true"]:empty::before {
-      content: attr(data-placeholder);
-      color: #aaa;
+      content: attr(data-ph);
+      color: #bbb;
       font-style: italic;
-      pointer-events: none;
     }
 
-    /* ── Briefkopf (Letterhead) ── */
-    .briefkopf {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8mm;
-      padding-bottom: 4mm;
-      border-bottom: 2px solid #2c3e50;
-    }
-    .absender-logo {
-      flex: 1;
-    }
-    .firmenname {
-      font-size: 16pt;
-      font-weight: 700;
-      color: #2c3e50;
-      letter-spacing: 0.5px;
+    /* block-level editable */
+    .block-edit {
       display: block;
+      width: 100%;
+      border-bottom: none;
+      border-left: 2px dashed transparent;
+      padding-left: 3px;
+      min-height: 1.4em;
     }
-    .firmen-untertitel {
-      font-size: 9pt;
-      color: #666;
-      margin-top: 2px;
-      display: block;
+    .block-edit:focus {
+      background: #eaf4ff;
+      border-left-color: #3498db;
     }
-    .briefkopf-kontakt {
-      text-align: right;
-      font-size: 8.5pt;
+
+    /* ── Absender (sender small line top) ── */
+    .absender-zeile {
+      font-size: 8pt;
       color: #444;
-      line-height: 1.7;
-    }
-    .briefkopf-kontakt strong {
-      color: #2c3e50;
+      margin-bottom: 14mm;
     }
 
-    /* ── Anschriftfeld (Address field) DIN 5008: starts at 27mm from top ── */
-    .anschriftfeld {
-      margin-top: 5mm;
-      margin-bottom: 8.46mm; /* DIN: Betreff starts at ~103mm */
-    }
-
-    /* Rücksendeadresse (return address above recipient) */
-    .ruecksende {
-      font-size: 7.5pt;
-      color: #777;
-      border-bottom: 0.5px solid #ccc;
-      padding-bottom: 2px;
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .ruecksende [contenteditable] {
-      font-size: 7.5pt;
-    }
-
+    /* ── Empfänger ── */
     .empfaenger {
       font-size: 11pt;
-      line-height: 1.6;
-    }
-    .empfaenger-firma {
-      font-weight: 600;
-    }
-
-    /* ── Infoblock rechts ── */
-    .infoblock {
-      position: absolute;
-      right: 20mm;
-      top: 50mm;
-      width: 75mm;
-      font-size: 9pt;
-      color: #444;
-      line-height: 1.8;
-    }
-    .infoblock table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .infoblock td:first-child {
-      color: #888;
-      padding-right: 6px;
-      white-space: nowrap;
-    }
-    .infoblock td:last-child {
-      font-weight: 500;
-      color: #1a1a1a;
-    }
-
-    /* ── Betreff (Subject) ── */
-    .betreff {
-      margin-top: 8.46mm;
-      margin-bottom: 4mm;
-    }
-    .betreff-label {
-      /* DIN 5008: Betreff ohne "Betreff:" label ist modern */
-      display: none;
-    }
-    .betreff-text {
-      font-size: 12pt;
       font-weight: 700;
-      color: #2c3e50;
-      display: block;
-      width: 100%;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+    .empfaenger div { font-weight: 700; }
+
+    /* ── Datum ── */
+    .datum-zeile {
+      text-align: right;
+      font-size: 11pt;
+      margin-top: 6mm;
+      margin-bottom: 14mm;
+    }
+
+    /* ── Betreff ── */
+    .betreff {
+      font-size: 11pt;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 6mm;
     }
 
     /* ── Anrede ── */
     .anrede {
-      margin-top: 5mm;
-      margin-bottom: 4mm;
       font-size: 11pt;
+      margin-bottom: 5mm;
     }
 
-    /* ── Brieftext ── */
+    /* ── Body paragraphs ── */
     .brieftext {
       font-size: 11pt;
       line-height: 1.6;
       text-align: justify;
-      margin-bottom: 6mm;
     }
     .brieftext p {
       margin-bottom: 3mm;
-      display: block;
-      width: 100%;
-      min-height: 1.4em;
+      min-height: 1.5em;
     }
 
     /* ── Grußformel ── */
-    .grussformel {
-      margin-top: 5mm;
-      margin-bottom: 18mm; /* space for signature */
-    }
-
-    /* ── Unterschrift ── */
-    .unterschrift {
-      margin-bottom: 5mm;
-    }
-    .unterschrift-name {
-      font-weight: 700;
+    .gruss {
+      margin-top: 6mm;
+      margin-bottom: 14mm;
       font-size: 11pt;
     }
-    .unterschrift-titel {
-      font-size: 9.5pt;
-      color: #555;
+
+    /* ── Name ── */
+    .name-zeile {
+      font-size: 11pt;
     }
 
-    /* ── Anlagen / PS ── */
-    .anlagen {
-      margin-top: 8mm;
-      padding-top: 4mm;
-      border-top: 0.5px solid #ddd;
-      font-size: 9.5pt;
-      color: #444;
-    }
-    .anlagen strong {
-      color: #2c3e50;
-    }
-
-    /* ── Fußzeile ── */
-    .fusszeile {
-      position: absolute;
-      bottom: 10mm;
-      left: 25mm;
-      right: 20mm;
-      font-size: 8pt;
-      color: #888;
-      border-top: 0.5px solid #ddd;
-      padding-top: 3mm;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .fusszeile span { flex: 1; text-align: center; }
-    .fusszeile span:first-child { text-align: left; }
-    .fusszeile span:last-child { text-align: right; }
-
-    /* ── Divider ── */
-    hr.brief-hr {
-      border: none;
-      border-top: 0.5px solid #e0e0e0;
-      margin: 4mm 0;
-    }
-
-    /* ── Edit hint ── */
-    .edit-hint {
-      text-align: center;
-      background: #fffbea;
-      border: 1px solid #f0d060;
-      color: #7a6000;
-      font-size: 9.5pt;
-      padding: 8px 16px;
-      margin: 0 0 16px;
-      border-radius: 4px;
-    }
-
-    /* ── PRINT styles ── */
+    /* ── PRINT ── */
     @media print {
-      body { background: #fff; }
-      .toolbar, .edit-hint, .page-wrapper-pad { display: none !important; }
-      .page-wrapper { padding: 0; background: #fff; }
-      .brief {
-        box-shadow: none;
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0;
-      }
-      [contenteditable="true"] {
-        border-bottom: none !important;
-        background: transparent !important;
-        cursor: default;
-      }
-      @page {
-        size: A4;
-        margin: 0;
-      }
+      body, .page-wrap { background: #fff; }
+      .toolbar, .hint { display: none !important; }
+      .brief { box-shadow: none; margin: 0; }
+      [contenteditable] { border: none !important; background: transparent !important; }
+      @page { size: A4; margin: 0; }
     }
   </style>
 </head>
 <body>
 
-<!-- Toolbar -->
 <div class="toolbar">
-  <h1>📄 Deutsches Briefformat – DIN 5008</h1>
-  <div class="toolbar-btns">
-    <button class="btn btn-print" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-    <button class="btn btn-reset" onclick="resetBrief()">↺ Zurücksetzen</button>
-  </div>
+  <span>📄 Deutsches Briefformat</span>
+  <button class="btn" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
 </div>
 
-<!-- Edit hint -->
-<div style="display:flex;justify-content:center;padding:16px 24px 0;">
-  <div class="edit-hint" style="max-width:210mm;width:100%;">
-    ✏️ Klicken Sie auf einen beliebigen Text, um ihn zu bearbeiten. Zum Drucken oder Speichern als PDF: <strong>Drucken / Als PDF speichern</strong> klicken.
-  </div>
-</div>
+<div class="hint">✏️ Klicken Sie auf einen beliebigen Text, um ihn zu bearbeiten &nbsp;|&nbsp; Zum Speichern als PDF: <strong>Drucken → Als PDF speichern</strong></div>
 
-<!-- A4 Page -->
-<div class="page-wrapper">
-  <div class="brief" id="brief">
+<div class="page-wrap">
+  <div class="brief">
 
-    <!-- Briefkopf -->
-    <div class="briefkopf">
-      <div class="absender-logo">
-        <span class="firmenname" contenteditable="true" data-placeholder="Firmenname GmbH">Musterfirma GmbH</span>
-        <span class="firmen-untertitel" contenteditable="true" data-placeholder="Branche / Slogan">Beratung &amp; Dienstleistungen</span>
-      </div>
-      <div class="briefkopf-kontakt">
-        <strong>Tel:</strong> <span contenteditable="true" data-placeholder="+49 ...">+49 30 123 456 78</span><br>
-        <strong>E-Mail:</strong> <span contenteditable="true" data-placeholder="info@firma.de">info@musterfirma.de</span><br>
-        <strong>Web:</strong> <span contenteditable="true" data-placeholder="www.firma.de">www.musterfirma.de</span><br>
-        <strong>Ust-IdNr.:</strong> <span contenteditable="true" data-placeholder="DE 000000000">DE 123456789</span>
-      </div>
+    <!-- Absender kleine Zeile oben -->
+    <div class="absender-zeile">
+      <span contenteditable="true" data-ph="Vor- und Nachname, Straße, PLZ Ort">Gatada Alnour, Ringstr. 29, 21339 Lüneburg</span>
     </div>
 
-    <!-- Infoblock (rechts) -->
-    <div class="infoblock">
-      <table>
-        <tr>
-          <td>Ort, Datum:</td>
-          <td><span contenteditable="true" data-placeholder="Berlin, 00.00.0000">Berlin, 13. Juni 2026</span></td>
-        </tr>
-        <tr>
-          <td>Ihr Zeichen:</td>
-          <td><span contenteditable="true" data-placeholder="–">–</span></td>
-        </tr>
-        <tr>
-          <td>Unser Zeichen:</td>
-          <td><span contenteditable="true" data-placeholder="MF/2026/001">MF/2026/001</span></td>
-        </tr>
-        <tr>
-          <td>Sachbearbeiter:</td>
-          <td><span contenteditable="true" data-placeholder="Max Mustermann">Max Mustermann</span></td>
-        </tr>
-        <tr>
-          <td>Telefon:</td>
-          <td><span contenteditable="true" data-placeholder="+49 ...">+49 30 123 456 79</span></td>
-        </tr>
-      </table>
+    <!-- Empfänger -->
+    <div class="empfaenger">
+      <div contenteditable="true" data-ph="Empfänger / Firma">Telekom Deutschland GmbH</div>
+      <div contenteditable="true" data-ph="Abteilung (optional)">Kundenservice</div>
+      <div contenteditable="true" data-ph="Straße Hausnummer">Landgrabenweg 151</div>
+      <div contenteditable="true" data-ph="PLZ Ort">53227 Bonn</div>
     </div>
 
-    <!-- Anschriftfeld -->
-    <div class="anschriftfeld">
-      <div class="ruecksende">
-        <span contenteditable="true" data-placeholder="Musterfirma GmbH · Musterstraße 1 · 10115 Berlin">Musterfirma GmbH · Musterstraße 1 · 10115 Berlin</span>
-      </div>
-      <div class="empfaenger">
-        <div class="empfaenger-firma" contenteditable="true" data-placeholder="Empfänger Firma GmbH">Empfänger Firma GmbH</div>
-        <div contenteditable="true" data-placeholder="z. Hd. Frau / Herrn ...">z. Hd. Frau Erika Musterfrau</div>
-        <div contenteditable="true" data-placeholder="Straße Hausnummer">Beispielstraße 42</div>
-        <div contenteditable="true" data-placeholder="PLZ Ort">80331 München</div>
-      </div>
+    <!-- Datum -->
+    <div class="datum-zeile">
+      <span contenteditable="true" data-ph="TT.MM.JJJJ">09.06.2026</span>
     </div>
 
     <!-- Betreff -->
-    <div class="betreff">
-      <span class="betreff-text" contenteditable="true" data-placeholder="Betreff des Briefes">
-        Angebot Nr. 2026-042 – Beratungsleistungen für Ihr Unternehmen
-      </span>
-    </div>
+    <div class="betreff" contenteditable="true" data-ph="Betreff des Schreibens&#10;(Zeilenumbruch mit Enter möglich)">Rücktritt vom neuen Glasfaser-Vertrag aufgrund von Nichterfüllung / Unberührtheit des DSL-Altvertrages
+Bestellnummer: 260123-PSM-43L9LC
+Gebäude: Ringstr. 29, 21339 Lüneburg</div>
 
     <!-- Anrede -->
     <div class="anrede">
-      <span contenteditable="true" data-placeholder="Sehr geehrte Damen und Herren,">Sehr geehrte Frau Musterfrau,</span>
+      <span contenteditable="true" data-ph="Sehr geehrte Damen und Herren,">Sehr geehrte Damen und Herren,</span>
     </div>
 
     <!-- Brieftext -->
     <div class="brieftext">
-      <p contenteditable="true" data-placeholder="Erster Absatz des Briefes...">
-        vielen Dank für Ihr Interesse an unseren Dienstleistungen. Gerne übersenden wir Ihnen hiermit unser unverbindliches Angebot für die gewünschten Beratungsleistungen.
-      </p>
-      <p contenteditable="true" data-placeholder="Zweiter Absatz...">
-        Unser erfahrenes Team steht Ihnen mit umfassender Expertise zur Verfügung. Wir legen großen Wert auf eine individuelle und maßgeschneiderte Beratung, die exakt auf die Bedürfnisse Ihres Unternehmens zugeschnitten ist.
-      </p>
-      <p contenteditable="true" data-placeholder="Dritter Absatz...">
-        Bei Fragen oder Anmerkungen stehen wir Ihnen jederzeit gerne zur Verfügung. Wir würden uns über die Möglichkeit einer persönlichen Vorstellung sehr freuen und verbleiben bis dahin mit freundlichen Erwartungen.
-      </p>
+
+      <p contenteditable="true" class="block-edit" data-ph="Erster Absatz...">am 23.01.2026 habe ich den Vertrag für einen Glasfaser-Anschluss mit der Auftragsnummer 260123-PSM-43L9LC abgeschlossen.</p>
+
+      <p contenteditable="true" class="block-edit" data-ph="Zweiter Absatz...">Obwohl der Hausanschluss bereits vorhanden ist und alle Vorbereitungen meinerseits am 24.01.2026 getroffen wurden, ist der Anschluss bis heute – nach mehr als vier Monaten und mehreren verschobenen bzw. abgesagten Terminen Ihrerseits – immer noch nicht freigeschaltet. Mit Ihrer jüngsten E-Mail haben Sie nun auch noch den geplanten Termin am 19.06.2026 storniert.</p>
+
+      <p contenteditable="true" class="block-edit" data-ph="Dritter Absatz...">Da Sie Ihrer Leistungspflicht innerhalb einer angemessenen Zeit nicht nachgekommen sind und verbindliche Termine wiederholt nicht eingehalten haben, trete ich hiermit mit sofortiger Wirkung von diesem neuen Glasfaser-Vertrag zurück. Ein neuer Terminvorschlag Ihrerseits ist nicht mehr notwendig und wird nicht akzeptiert.</p>
+
+      <p contenteditable="true" class="block-edit" data-ph="Vierter Absatz...">Mein bestehender DSL-Altvertrag, für den ich weiterhin ordnungsgemäß die monatlichen Gebühren bezahle, bleibt von diesem Rücktritt ausdrücklich unberührt und läuft unverändert weiter.</p>
+
+      <p contenteditable="true" class="block-edit" data-ph="Abschlusssatz...">Bitte bestätigen Sie mir den Rücktritt von dem oben genannten Glasfaser-Auftrag sowie das unveränderte Weiterbestehen des DSL-Altvertrages schriftlich innerhalb von 14 Tagen.</p>
+
     </div>
 
     <!-- Grußformel -->
-    <div class="grussformel">
-      <span contenteditable="true" data-placeholder="Mit freundlichen Grüßen">Mit freundlichen Grüßen</span>
+    <div class="gruss">
+      <span contenteditable="true" data-ph="Mit freundlichen Grüßen">Mit freundlichen Grüßen</span>
     </div>
 
-    <!-- Unterschrift -->
-    <div class="unterschrift">
-      <div class="unterschrift-name" contenteditable="true" data-placeholder="Vor- und Nachname">Max Mustermann</div>
-      <div class="unterschrift-titel" contenteditable="true" data-placeholder="Funktion / Titel">Geschäftsführer</div>
+    <!-- Name -->
+    <div class="name-zeile">
+      <span contenteditable="true" data-ph="Vor- und Nachname">Gatada Alnour</span>
     </div>
 
-    <!-- Anlagen -->
-    <div class="anlagen">
-      <strong>Anlagen:</strong>
-      <span contenteditable="true" data-placeholder="z. B. Angebot, Lebenslauf, Produktkatalog">Angebot (3 Seiten), Referenzliste, AGB</span>
-    </div>
-
-    <!-- Fußzeile -->
-    <div class="fusszeile">
-      <span contenteditable="true" data-placeholder="Firmensitz: Musterstraße 1, 10115 Berlin">Firmensitz: Musterstraße 1, 10115 Berlin</span>
-      <span contenteditable="true" data-placeholder="HRB 123456 · Amtsgericht Berlin">HRB 123456 · Amtsgericht Berlin</span>
-      <span contenteditable="true" data-placeholder="IBAN: DE00 0000 0000 0000 0000 00">IBAN: DE12 3456 7890 1234 5678 90</span>
-    </div>
-
-  </div><!-- /.brief -->
-</div><!-- /.page-wrapper -->
+  </div>
+</div>
 
 <script>
-  function resetBrief() {
-    if (!confirm('Alle Änderungen zurücksetzen?')) return;
-    location.reload();
-  }
-
-  // Tab between fields
-  document.querySelectorAll('[contenteditable="true"]').forEach((el, i, all) => {
-    el.addEventListener('keydown', function(e) {
+  // Tab-Navigation zwischen Feldern
+  const fields = [...document.querySelectorAll('[contenteditable="true"]')];
+  fields.forEach((el, i) => {
+    el.addEventListener('keydown', e => {
       if (e.key === 'Tab') {
         e.preventDefault();
-        const next = all[i + (e.shiftKey ? -1 : 1)];
-        if (next) {
-          next.focus();
-          const range = document.createRange();
-          const sel = window.getSelection();
-          range.selectNodeContents(next);
-          range.collapse(false);
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }
+        const next = fields[i + (e.shiftKey ? -1 : 1)];
+        if (next) { next.focus(); selectAll(next); }
       }
     });
   });
+  function selectAll(el) {
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    const s = window.getSelection();
+    s.removeAllRanges();
+    s.addRange(r);
+  }
 </script>
 </body>
 </html>
