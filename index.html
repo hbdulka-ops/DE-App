@@ -18,108 +18,88 @@
   .toolbar {
     width: 210mm; max-width: 100%;
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
     font-family: 'Source Sans 3', sans-serif;
   }
-  .toolbar-hint { font-size: 0.75rem; color: #7a7060; letter-spacing: 0.04em; }
+  .toolbar-hint { font-size: 0.73rem; color: #7a7060; }
   .btn-print {
     background: #2c3e50; color: #fff; border: none;
-    padding: 0.45rem 1.2rem;
+    padding: 0.4rem 1.1rem;
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.78rem; letter-spacing: 0.07em;
+    font-size: 0.75rem; letter-spacing: 0.07em;
     text-transform: uppercase; cursor: pointer;
   }
   .btn-print:hover { background: #1a2a38; }
 
-  /* ── A4 ── */
+  /* ── A4 — min-height so it grows with content ── */
   .page {
-    width: 210mm; height: 297mm; max-width: 100%;
+    width: 210mm;
+    min-height: 297mm;
+    max-width: 100%;
     background: #faf9f7;
-    padding: 18mm 22mm 14mm 28mm;
+    padding: 12mm 20mm 14mm 25mm;
     position: relative;
     box-shadow: 0 4px 28px rgba(0,0,0,0.18);
-    overflow: hidden;
   }
 
   /* ── EDITABLE ── */
   [contenteditable] {
     outline: none; border-radius: 2px;
     transition: background 0.12s;
-    min-width: 20px; display: inline-block;
+    min-width: 10px; display: inline-block;
   }
-  [contenteditable]:hover  { background: #eef4fb; }
-  [contenteditable]:focus  { background: #ddeeff; box-shadow: 0 0 0 1.5px #5b9bd5; }
-  [contenteditable].block  { display: block; width: 100%; white-space: pre-wrap; }
+  [contenteditable]:hover { background: #eef4fb; }
+  [contenteditable]:focus { background: #ddeeff; box-shadow: 0 0 0 1.5px #5b9bd5; }
+  [contenteditable].block { display: block; width: 100%; white-space: pre-wrap; word-break: break-word; }
   [contenteditable][data-ph]:empty::before {
-    content: attr(data-ph); color: #bbb; font-style: italic; pointer-events: none;
+    content: attr(data-ph); color: #c0b8b0; font-style: italic; pointer-events: none;
   }
 
   /* ── ABSENDER ── */
   .absender {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 8pt; color: #444; line-height: 1.7;
+    font-size: 7.5pt; color: #555; line-height: 1.5;
+    margin-bottom: 3mm;
   }
-  .absender .name {
-    font-family: 'Source Serif 4', serif;
-    font-size: 11.5pt; font-weight: 600; color: #1a1a1a; margin-bottom: 1mm;
-  }
-  .absender-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+  .absender-row { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
   .sep { color: #ccc; }
-  .rule { height: 0.5px; background: #c0b8b0; margin: 3.5mm 0; }
 
-  /* ── DATUM / ORT (right) ── */
-  .datum-block {
-    position: absolute; right: 22mm; top: 18mm;
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 8.5pt; color: #1a1a1a; text-align: right;
-    line-height: 1.8;
+  /* ── EMPFÄNGER + DATUM nebeneinander ── */
+  .header-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 4mm;
   }
-
-  /* ── EMPFÄNGER ── */
-  .empfaenger { font-size: 10pt; line-height: 1.75; margin-top: 2mm; }
-  .empfaenger .org { font-weight: 600; font-size: 10.5pt; }
-
-  .gap { height: 9mm; }
+  .empfaenger { font-size: 9.5pt; line-height: 1.6; }
+  .empfaenger .org { font-weight: 600; }
+  .datum-block {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 8pt; color: #1a1a1a;
+    text-align: right; white-space: nowrap;
+    padding-top: 1mm;
+  }
 
   /* ── BETREFF ── */
   .betreff {
-    margin: 4mm 0 5mm;
-    padding-left: 4mm;
+    padding-left: 3.5mm;
     border-left: 2.5px solid #2c3e50;
-    font-size: 11pt; font-weight: 600; color: #2c3e50; line-height: 1.35;
+    font-size: 10.5pt; font-weight: 600; color: #2c3e50; line-height: 1.3;
+    margin-bottom: 3.5mm;
   }
 
   /* ── BODY ── */
-  .brief-body { font-size: 9.5pt; line-height: 1.75; color: #1a1a1a; }
-  .anrede  { margin-bottom: 4.5mm; }
-  .p       { margin-bottom: 4mm; }
-  .schluss { margin: 5mm 0 4mm; }
-  .gruss   { margin-bottom: 13mm; }
+  .brief-body { font-size: 9.5pt; line-height: 1.55; color: #1a1a1a; }
+  .anrede  { margin-bottom: 2mm; }
+  .p       { margin-bottom: 2mm; }
+  .gruss   { margin-top: 3mm; margin-bottom: 5mm; }
 
-  .sig-wrap { display: inline-block; min-width: 55mm; }
-  .sig-line {
-    border-top: 0.5px solid #c0b8b0;
-    padding-top: 2mm;
-  }
-  .sig-name  { font-size: 9.5pt; font-weight: 600; }
-  .sig-titel { font-family: 'Source Sans 3', sans-serif; font-size: 7.5pt; color: #777; margin-top: 0.5mm; }
-
-  /* ── ANLAGEN ── */
-  .anlagen {
-    margin-top: 7mm; border-top: 0.5px solid #c0b8b0; padding-top: 3mm;
-    font-family: 'Source Sans 3', sans-serif; font-size: 8pt; color: #666;
-  }
-  .anlagen b {
-    font-size: 6.5pt; text-transform: uppercase; letter-spacing: 0.08em;
-    color: #aaa; display: block; margin-bottom: 1.5mm;
-  }
+  .sig-name { font-size: 9.5pt; font-weight: 600; }
 
   /* ── PRINT ── */
   @media print {
     @page { size: A4; margin: 0; }
     body { background: #fff; padding: 0; }
     .toolbar { display: none; }
-    .page { box-shadow: none; }
+    .page { box-shadow: none; min-height: 297mm; }
     [contenteditable]:hover,
     [contenteditable]:focus { background: none !important; box-shadow: none !important; }
     [contenteditable][data-ph]:empty::before { color: #ddd; font-style: normal; }
@@ -137,72 +117,62 @@
 
   <!-- ABSENDER -->
   <div class="absender">
-    <div class="name">
-      <span contenteditable data-ph="Ihr Name / Firmenname"></span>
-    </div>
     <div class="absender-row">
+      <span contenteditable data-ph="Ihr Name"></span>
+      <span class="sep">·</span>
       <span contenteditable data-ph="Straße Nr."></span>
       <span class="sep">·</span>
-      <span contenteditable data-ph="PLZ Stadt"></span>
-      <span class="sep">·</span>
-      <span contenteditable data-ph="Telefon / E-Mail"></span>
-    </div>
-  </div>
-  <div class="rule"></div>
-
-  <!-- DATUM / ORT -->
-  <div class="datum-block">
-    <span contenteditable data-ph="Stadt"></span>, den
-    <span contenteditable data-ph="TT. Monat JJJJ"></span>
-  </div>
-
-  <!-- EMPFÄNGER -->
-  <div class="empfaenger">
-    <div class="org"><span contenteditable data-ph="Name / Firma / Behörde"></span></div>
-    <div><span contenteditable data-ph="Straße und Hausnummer"></span></div>
-    <div>
-      <span contenteditable data-ph="PLZ"></span>&nbsp;<span contenteditable data-ph="Stadt"></span>
+      <span contenteditable data-ph="PLZ"></span>
+      <span contenteditable data-ph="Stadt"></span>
     </div>
   </div>
 
-  <div class="gap"></div>
+  <!-- EMPFÄNGER + DATUM -->
+  <div class="header-row">
+    <div class="empfaenger">
+      <div class="org"><span contenteditable data-ph="Name / Firma"></span></div>
+      <div><span contenteditable data-ph="Straße und Hausnummer"></span></div>
+      <div><span contenteditable data-ph="PLZ"></span>&nbsp;<span contenteditable data-ph="Stadt"></span></div>
+    </div>
+    <div class="datum-block">
+      <span contenteditable data-ph="Stadt"></span>, den <span contenteditable data-ph="TT. Monat JJJJ"></span>
+    </div>
+  </div>
 
   <!-- BETREFF -->
   <div class="betreff">
-    <span contenteditable class="block" data-ph="Betreff (z. B.: Kündigung, Anfrage, Bewerbung …)"></span>
+    <span contenteditable class="block" data-ph="Betreff …"></span>
   </div>
 
   <!-- BODY -->
   <div class="brief-body">
 
     <div class="anrede">
-      <span contenteditable data-ph="Sehr geehrte Damen und Herren,"></span>
+      <span contenteditable class="block" data-ph="Sehr geehrte Damen und Herren,"></span>
     </div>
 
     <div class="p">
-      <span contenteditable class="block" data-ph="Einleitung – worum geht es? (1–2 Sätze)"></span>
+      <span contenteditable class="block" data-ph="Einleitung …"></span>
     </div>
 
     <div class="p">
-      <span contenteditable class="block" data-ph="Hauptteil – Einzelheiten, Begründung, Fakten …"></span>
+      <span contenteditable class="block" data-ph="Hauptteil …"></span>
     </div>
 
     <div class="p">
-      <span contenteditable class="block" data-ph="Weiteres – Bitte, Frist, nächste Schritte … (oder leer lassen)"></span>
+      <span contenteditable class="block" data-ph="Weiteres … (oder leer lassen)"></span>
     </div>
 
-    <div class="p schluss">
-      <span contenteditable class="block" data-ph="Abschluss – z. B.: Ich freue mich auf Ihre Rückmeldung. / Für Rückfragen stehe ich gerne zur Verfügung."></span>
+    <div class="p">
+      <span contenteditable class="block" data-ph="Abschluss …"></span>
     </div>
 
     <div class="gruss">
-      <span contenteditable data-ph="Mit freundlichen Grüßen"></span>
+      <span contenteditable class="block" data-ph="Mit freundlichen Grüßen"></span>
     </div>
 
-    <div class="sig-wrap">
-      <div class="sig-line">
-        <div class="sig-name"><span contenteditable data-ph="Vor- und Nachname"></span></div>
-      </div>
+    <div class="sig-name">
+      <span contenteditable data-ph="Vor- und Nachname"></span>
     </div>
 
   </div>
