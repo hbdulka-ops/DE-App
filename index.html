@@ -1,191 +1,431 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Deutsches Briefformat</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  font-family:Arial,sans-serif;
-  font-size:12pt;
-  color:#111;
-  background:#c8c8c8;
-  line-height:1.45;
-}
-.toolbar{
-  background:#2c3e50;
-  padding:9px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-  box-shadow:0 2px 6px rgba(0,0,0,.35);
-}
-.toolbar span{color:#ecf0f1;font-size:11pt;font-weight:600;}
-.btn{
-  padding:7px 18px;border:none;border-radius:4px;
-  cursor:pointer;font-size:10pt;font-weight:600;
-  background:#27ae60;color:#fff;
-}
-.btn:hover{background:#1e8449;}
-.hint{
-  text-align:center;padding:7px;
-  background:#fffbea;font-size:9pt;color:#7a6000;
-  border-bottom:1px solid #f0d060;
-}
-.page-wrap{
-  display:flex;justify-content:center;
-  padding:28px 0 60px;
-}
-.brief{
-  width:210mm;
-  min-height:297mm;
-  background:#fff;
-  box-shadow:0 3px 22px rgba(0,0,0,.22);
-  position:relative;
-  padding-top:45mm;
-  padding-left:25mm;
-  padding-right:20mm;
-  padding-bottom:20mm;
-}
-[contenteditable]{
-  outline:none;
-  border-bottom:1.5px dashed #3498db;
-  cursor:text;
-  display:inline;
-  padding:0 1px;
-  transition:background .15s;
-  min-width:10px;
-}
-[contenteditable]:focus{background:#eaf4ff;}
-[contenteditable]:empty::before{
-  content:attr(data-ph);
-  color:#ccc;
-}
-.absender-zeile{
-  font-size:8pt;
-  color:#333;
-  margin-bottom:3mm;
-}
-.empfaenger{
-  font-size:12pt;
-  font-weight:700;
-  line-height:1.65;
-}
-.empfaenger div{display:block;}
-.datum{
-  position:absolute;
-  top:calc(45mm + 4mm + 28mm);
-  right:20mm;
-  font-size:12pt;
-  text-align:right;
-}
-.gap-after-address{margin-top:26mm;}
-.betreff{
-  font-size:12pt;
-  font-weight:700;
-  line-height:1.6;
-  white-space:pre-wrap;
-  margin-bottom:6mm;
-  display:block;
-  width:100%;
-  border-bottom:none !important;
-  border-left:2px dashed transparent;
-  padding-left:3px;
-  min-height:1.5em;
-}
-.betreff:focus{background:#eaf4ff;border-left-color:#3498db !important;}
-.betreff:empty::before{content:attr(data-ph);color:#ccc;font-weight:400;}
-.anrede{font-size:12pt;margin-bottom:5mm;}
-.brieftext{
-  font-size:12pt;
-  line-height:1.55;
-  text-align:justify;
-}
-.brieftext p{
-  display:block;
-  width:100%;
-  min-height:1.5em;
-  margin-bottom:0;
-  border-bottom:none !important;
-  border-left:2px dashed transparent;
-  padding-left:3px;
-}
-.brieftext p:focus{background:#eaf4ff;border-left-color:#3498db !important;}
-.brieftext p:empty::before{content:attr(data-ph);color:#ccc;}
-.gruss{font-size:12pt;margin-top:5mm;margin-bottom:14mm;}
-.name-zeile{font-size:12pt;}
-@media print{
-  body,.page-wrap{background:#fff;}
-  .toolbar,.hint{display:none!important;}
-  .brief{box-shadow:none;}
-  [contenteditable]{border:none!important;background:transparent!important;}
-  @page{size:A4;margin:0;}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formeller Brief – Briefvorlage</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=Source+Sans+3:wght@400;600&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ink: #1a1a1a;
+      --mid: #4a4a4a;
+      --rule: #b0a898;
+      --accent: #2c3e50;
+      --paper: #faf9f7;
+      --field-bg: #f0ede8;
+    }
+
+    body {
+      background: #e5e0d8;
+      font-family: 'Source Serif 4', 'Georgia', serif;
+      color: var(--ink);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Toolbar (screen only) ── */
+    .toolbar {
+      width: 210mm;
+      max-width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.8rem;
+      color: #6b6056;
+    }
+
+    .toolbar span { letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .btn-print {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.45rem 1.2rem;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-print:hover { background: #1a2a38; }
+
+    /* ── A4 Sheet ── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      max-width: 100%;
+      background: var(--paper);
+      padding: 25mm 25mm 20mm 30mm; /* DIN 5008 margins */
+      position: relative;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+    }
+
+    /* ── Fold markers (DIN 5008) ── */
+    .fold-mark {
+      position: absolute;
+      left: 8mm;
+      width: 5mm;
+      height: 0.5px;
+      background: var(--rule);
+    }
+    .fold-mark.top    { top: 87mm; }
+    .fold-mark.middle { top: 192mm; }
+
+    /* ── Absender (Sender block) ── */
+    .absender {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 7pt;
+      color: var(--mid);
+      letter-spacing: 0.02em;
+      line-height: 1.7;
+      margin-bottom: 8mm;
+    }
+    .absender .name-line {
+      font-family: 'Source Serif 4', serif;
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .absender-rule {
+      height: 0.5px;
+      background: var(--rule);
+      margin: 4mm 0;
+    }
+
+    /* ── Empfänger window (address field, DIN 5008 position) ── */
+    .adressfeld {
+      margin-top: 5mm;
+      margin-bottom: 0;
+    }
+    .rücksendeadresse {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 6.5pt;
+      color: var(--mid);
+      border-bottom: 0.5px solid var(--rule);
+      padding-bottom: 2mm;
+      margin-bottom: 3mm;
+      letter-spacing: 0.04em;
+    }
+    .empfaenger {
+      font-size: 10.5pt;
+      line-height: 1.7;
+      min-height: 30mm;
+    }
+    .empfaenger .org {
+      font-weight: 600;
+    }
+
+    /* ── Informationsblock (right-aligned) ── */
+    .infoblock {
+      position: absolute;
+      right: 25mm;
+      top: 50mm;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 8.5pt;
+      color: var(--mid);
+      text-align: right;
+      line-height: 1.8;
+    }
+    .infoblock .label {
+      font-size: 7pt;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #8a8078;
+    }
+    .infoblock .value {
+      color: var(--ink);
+      font-size: 9pt;
+    }
+    .infoblock .ort-datum {
+      font-size: 9.5pt;
+      color: var(--ink);
+      margin-top: 2mm;
+    }
+
+    /* ── Spacer between address and Betreff ── */
+    .space-after-address { height: 38mm; }
+
+    /* ── Betreff ── */
+    .betreff-block {
+      margin-top: 8mm;
+      margin-bottom: 7mm;
+    }
+    .betreff-block .betreff-label {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 7pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a8078;
+      display: block;
+      margin-bottom: 1.5mm;
+    }
+    .betreff-block .betreff-text {
+      font-family: 'Source Serif 4', serif;
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.35;
+    }
+    .betreff-rule {
+      height: 1px;
+      background: var(--accent);
+      margin-top: 4mm;
+      opacity: 0.25;
+    }
+
+    /* ── Body text ── */
+    .brief-body {
+      font-size: 10pt;
+      line-height: 1.75;
+      color: var(--ink);
+    }
+
+    .anrede {
+      margin-bottom: 5mm;
+    }
+
+    .absatz {
+      margin-bottom: 4.5mm;
+    }
+
+    .schluss {
+      margin-top: 7mm;
+      margin-bottom: 7mm;
+    }
+
+    /* ── Grußformel ── */
+    .grussformel {
+      margin-bottom: 14mm;
+    }
+
+    /* ── Unterschrift ── */
+    .unterschrift-block {
+      border-top: 0.5px solid var(--rule);
+      padding-top: 3mm;
+      display: inline-block;
+      min-width: 60mm;
+    }
+    .unterschrift-block .sig-name {
+      font-size: 10pt;
+      font-weight: 600;
+    }
+    .unterschrift-block .sig-titel {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 8pt;
+      color: var(--mid);
+      margin-top: 1mm;
+    }
+
+    /* ── Anlagen ── */
+    .anlagen {
+      margin-top: 10mm;
+      border-top: 0.5px solid var(--rule);
+      padding-top: 4mm;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 8.5pt;
+      color: var(--mid);
+    }
+    .anlagen strong {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 7.5pt;
+      color: #8a8078;
+      display: block;
+      margin-bottom: 2mm;
+    }
+
+    /* ── Placeholder highlight (screen only) ── */
+    .ph {
+      background: var(--field-bg);
+      border-bottom: 1px dashed var(--rule);
+      color: #7a7060;
+      padding: 0 2px;
+      font-style: italic;
+    }
+
+    /* ── Footer (screen only) ── */
+    .footer-note {
+      width: 210mm;
+      max-width: 100%;
+      text-align: center;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.72rem;
+      color: #9a9086;
+      margin-top: 1.2rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .toolbar, .footer-note { display: none; }
+      .page {
+        box-shadow: none;
+        width: 210mm;
+        min-height: 297mm;
+        page-break-after: always;
+      }
+      .ph {
+        background: none;
+        border-bottom: 1px solid #ccc;
+        color: #444;
+        font-style: normal;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="toolbar">
-  <span>📄 Deutsches Briefformat – DIN 5008</span>
-  <button class="btn" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-</div>
-<div class="hint">✏️ Text anklicken zum Bearbeiten &nbsp;|&nbsp; PDF: <strong>Drucken → Als PDF speichern</strong></div>
-
-<div class="page-wrap">
- <div class="brief">
-
-  <div class="absender-zeile">
-    <span contenteditable="true" data-ph="Name, Straße, PLZ Ort"></span>
+  <!-- Screen toolbar -->
+  <div class="toolbar">
+    <span>Briefvorlage · DIN 5008</span>
+    <button class="btn-print" onclick="window.print()">⎙ Drucken / Als PDF speichern</button>
   </div>
 
-  <div class="empfaenger">
-    <div contenteditable="true" data-ph="Firma / Name"></div>
-    <div contenteditable="true" data-ph="Abteilung"></div>
-    <div contenteditable="true" data-ph="Straße Hausnummer"></div>
-    <div contenteditable="true" data-ph="PLZ Ort"></div>
-  </div>
+  <!-- A4 Page -->
+  <div class="page">
 
-  <div class="datum">
-    <span contenteditable="true" data-ph="TT.MM.JJJJ"></span>
-  </div>
+    <!-- DIN 5008 fold marks -->
+    <div class="fold-mark top"></div>
+    <div class="fold-mark middle"></div>
 
-  <div class="gap-after-address">
+    <!-- ── ABSENDER ── -->
+    <div class="absender">
+      <div class="name-line"><span class="ph">[Ihr Vor- und Nachname]</span></div>
+      <span class="ph">[Straße und Hausnummer]</span><br>
+      <span class="ph">[PLZ]</span> <span class="ph">[Stadt]</span><br>
+      Telefon: <span class="ph">[+49 XXX XXXXXXX]</span><br>
+      E-Mail: <span class="ph">[ihre.email@beispiel.de]</span>
+    </div>
+    <div class="absender-rule"></div>
 
-    <div class="betreff" contenteditable="true" data-ph="Betreff"></div>
-
-    <div class="anrede">
-      <span contenteditable="true" data-ph="Sehr geehrte Damen und Herren,"></span>
+    <!-- ── INFOBLOCK (right side) ── -->
+    <div class="infoblock">
+      <div class="label">Ihr Zeichen</div>
+      <div class="value"><span class="ph">[Aktenzeichen / —]</span></div>
+      <br>
+      <div class="label">Unser Zeichen</div>
+      <div class="value"><span class="ph">[Vorgangszeichen / —]</span></div>
+      <br>
+      <div class="ort-datum">
+        <span class="ph">[Stadt]</span>, den <span class="ph">[TT. Monat JJJJ]</span>
+      </div>
     </div>
 
-    <div class="brieftext">
-      <p contenteditable="true" data-ph="Text …"></p>
+    <!-- ── ADRESSFELD / EMPFÄNGER ── -->
+    <div class="adressfeld">
+      <div class="rücksendeadresse">
+        <span class="ph">[Ihr Name]</span> · <span class="ph">[Straße Nr.]</span> · <span class="ph">[PLZ Stadt]</span>
+      </div>
+      <div class="empfaenger">
+        <span class="org ph">[Name der Behörde / des Unternehmens]</span><br>
+        <span class="ph">[Abteilung / z. Hd. Frau / Herrn ...]</span><br>
+        <span class="ph">[Straße und Hausnummer]</span><br>
+        <span class="ph">[PLZ]</span> <span class="ph">[Stadt]</span>
+      </div>
     </div>
 
-    <div class="gruss">
-      <span contenteditable="true" data-ph="Mit freundlichen Grüßen"></span>
+    <!-- Spacer to push Betreff below address window -->
+    <div class="space-after-address"></div>
+
+    <!-- ── BETREFF ── -->
+    <div class="betreff-block">
+      <span class="betreff-label">Betreff</span>
+      <div class="betreff-text">
+        <span class="ph">[Kurze, präzise Beschreibung des Anliegens – z. B.: Antrag auf Erteilung einer Genehmigung gem. § XX]</span>
+      </div>
+      <div class="betreff-rule"></div>
     </div>
 
-    <div class="name-zeile">
-      <span contenteditable="true" data-ph="Vor- und Nachname"></span>
+    <!-- ── BRIEFKÖRPER ── -->
+    <div class="brief-body">
+
+      <!-- Anrede -->
+      <div class="anrede">
+        Sehr geehrte Damen und Herren,<br>
+        <!-- Alternative: Sehr geehrte Frau [Nachname], / Sehr geehrter Herr [Nachname], -->
+      </div>
+
+      <!-- Einleitung -->
+      <div class="absatz">
+        mit diesem Schreiben wende ich mich an Sie bezüglich
+        <span class="ph">[kurze Nennung des Anliegens / Sachverhalts]</span>.
+        Ich bitte Sie höflichst, mein Anliegen zu prüfen und mir eine entsprechende Rückmeldung zukommen zu lassen.
+      </div>
+
+      <!-- Hauptteil -->
+      <div class="absatz">
+        <span class="ph">
+          [Hauptteil: Schildern Sie hier den Sachverhalt sachlich und vollständig.
+          Nennen Sie alle relevanten Fakten, Daten und Hintergründe,
+          die für die Bearbeitung Ihres Anliegens notwendig sind.
+          Gliedern Sie den Text bei Bedarf in mehrere Absätze.]
+        </span>
+      </div>
+
+      <div class="absatz">
+        <span class="ph">
+          [Zweiter Absatz: Ergänzende Informationen, Bezugnahme auf frühere Schriftwechsel
+          oder Aktenzeichen, Nennung von beigefügten Unterlagen o. Ä.
+          Beispiel: „In der Anlage übersende ich Ihnen die erforderlichen Unterlagen
+          zur weiteren Bearbeitung."]
+        </span>
+      </div>
+
+      <!-- Schluss -->
+      <div class="absatz schluss">
+        Ich stehe Ihnen für Rückfragen jederzeit gerne zur Verfügung und bitte um
+        eine schriftliche Bestätigung des Eingangs dieses Schreibens.
+        Für Ihre Bemühungen danke ich Ihnen im Voraus.
+      </div>
+
+      <!-- Grußformel -->
+      <div class="grussformel">
+        Mit freundlichen Grüßen
+      </div>
+
+      <!-- Unterschrift -->
+      <div class="unterschrift-block">
+        <div class="sig-name"><span class="ph">[Vor- und Nachname]</span></div>
+        <div class="sig-titel"><span class="ph">[Titel / Funktion, falls zutreffend]</span></div>
+      </div>
+
+    </div><!-- /brief-body -->
+
+    <!-- ── ANLAGEN ── -->
+    <div class="anlagen">
+      <strong>Anlagen</strong>
+      <span class="ph">[1. Kopie des Personalausweises]</span><br>
+      <span class="ph">[2. Nachweis / Bescheinigung / Formular XY]</span><br>
+      <span class="ph">[3. Weitere Unterlagen]</span>
     </div>
 
-  </div>
- </div>
-</div>
+  </div><!-- /page -->
 
-<script>
-const fields=[...document.querySelectorAll('[contenteditable]')];
-fields.forEach((el,i)=>{
-  el.addEventListener('keydown',e=>{
-    if(e.key==='Tab'){
-      e.preventDefault();
-      const n=fields[i+(e.shiftKey?-1:1)];
-      if(n){n.focus();const r=document.createRange();r.selectNodeContents(n);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
-    }
-  });
-});
-</script>
+  <p class="footer-note">
+    Formatvorlage nach DIN 5008 · Alle Platzhalter in kursiv ersetzen · Drucken oder Als PDF speichern
+  </p>
+
 </body>
 </html>
